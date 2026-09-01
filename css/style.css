@@ -717,9 +717,15 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ==================== CORPO DOCENTE ==================== */
 .docentes-grid {
-  overflow: hidden;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
   max-width: 1200px;
   margin: 0 auto;
+}
+
+.docentes-grid::-webkit-scrollbar {
+  display: none;
 }
 
 .docentes-track {
@@ -727,7 +733,6 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   gap: 30px;
   width: max-content;
   padding-bottom: 10px;
-  animation: docentesMove 45s linear infinite;
 }
 
 .docentes-track .docente-card {
@@ -735,13 +740,36 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   width: 380px;
 }
 
-@keyframes docentesMove {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
+.docentes-nav {
+  display: flex;
+  justify-content: center;
+  gap: 14px;
+  margin-top: 24px;
 }
 
-.docentes-grid:hover .docentes-track {
-  animation-play-state: paused;
+.docentes-nav__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border: 2px solid var(--amarelo);
+  background: transparent;
+  color: var(--cinza-escuro);
+  border-radius: 50%;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background var(--transition), color var(--transition), transform var(--transition);
+}
+
+.docentes-nav__btn:hover {
+  background: var(--amarelo);
+  color: var(--cinza-escuro);
+  transform: scale(1.05);
+}
+
+.docentes-nav__btn:active {
+  transform: scale(0.95);
 }
 
 .docente-card {
