@@ -272,7 +272,7 @@
           </div>
           <h3 class="docente-card__name">Maurício Correia Lemes Neto</h3>
           <p class="docente-card__credentials">Mestre &bull; UTFPR</p>
-          <p class="docente-card__bio">Mestre em Ciências da Computação pela Universidade Federal de Santa Catarina (UFSC) e professor na UTFPR. Atua na área de Ciência da Computação, com ênfase em Software Básico e programação, incluindo linguagens de programação, sistemas especialistas, programação web e fotogrametria.</p>
+          <p class="docente-card__bio">Mestre em Ciências da Computação pela Universidade Federal de Santa Catarina (UFSC) e professor na UTFPR. Atua na área de Ciência da Computação, com ênfase em lógica e programação, incluindo linguagens de programação, sistemas especialistas, programação web e fotogrametria.</p>
         </div>
         <div class="docente-card">
           <div class="docente-card__photo">
@@ -368,7 +368,7 @@
           </div>
           <h3 class="docente-card__name">Maurício Correia Lemes Neto</h3>
           <p class="docente-card__credentials">Mestre &bull; UTFPR</p>
-          <p class="docente-card__bio">Mestre em Ciências da Computação pela Universidade Federal de Santa Catarina (UFSC) e professor na UTFPR. Atua na área de Ciência da Computação, com ênfase em Software Básico e programação, incluindo linguagens de programação, sistemas especialistas, programação web e fotogrametria.</p>
+          <p class="docente-card__bio">Mestre em Ciências da Computação pela Universidade Federal de Santa Catarina (UFSC) e professor na UTFPR. Atua na área de Ciência da Computação, com ênfase em lógica e programação, incluindo linguagens de programação, sistemas especialistas, programação web e fotogrametria.</p>
         </div>
         <div class="docente-card">
           <div class="docente-card__photo">
@@ -411,6 +411,10 @@
           <p class="docente-card__bio">Doutor em Ciência da Computação e Matemática Computacional pela USP e professor na UTFPR. Realiza pesquisas relacionadas à Interação Humano-Computador, Desenvolvimento Web e Engenharia de Software, com foco no desenvolvimento de soluções tecnológicas inovadoras e aplicadas.</p>
         </div>
         </div>
+      </div>
+      <div class="docentes-nav">
+        <button class="docentes-nav__btn" data-docentes-prev aria-label="Professores anteriores" title="Rolar para professores anteriores"><i class="fa-solid fa-chevron-left"></i></button>
+        <button class="docentes-nav__btn" data-docentes-next aria-label="Próximos professores" title="Rolar para próximos professores"><i class="fa-solid fa-chevron-right"></i></button>
       </div>
     </div>
   </section>
@@ -745,7 +749,6 @@
           <ul>
             <li><a href="https://www.utfpr.edu.br/campus/londrina" target="_blank" rel="noopener">UTFPR Londrina</a></li>
             <li><a href="https://www.utfpr.edu.br" target="_blank" rel="noopener">Portal UTFPR</a></li>
-            <li><a href="https://www.flickr.com/photos/utfpr/albums/72157703155262791/" target="_blank" rel="noopener">Fotos do Campus</a></li>
           </ul>
         </div>
       </div>
@@ -895,6 +898,58 @@
         }
       });
     });
+
+    // Docentes carousel - rolagem automática + controles manuais
+    const docentesGrid = document.querySelector('.docentes-grid');
+    const docentesTrack = document.querySelector('.docentes-track');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const card = docentesTrack ? docentesTrack.querySelector('.docente-card') : null;
+    const cardStep = card ? (card.offsetWidth + 30) : 410;
+
+    let docentesAutoScroll = null;
+    let docentesPaused = false;
+    let docentesResumeTimer = null;
+
+    function pauseDocentesAutoScroll(ms) {
+      docentesPaused = true;
+      if (docentesResumeTimer) clearTimeout(docentesResumeTimer);
+      docentesResumeTimer = setTimeout(() => { docentesPaused = false; }, ms);
+    }
+
+    function startDocentesAutoScroll() {
+      if (!docentesGrid || reduceMotion || docentesAutoScroll) return;
+      docentesAutoScroll = setInterval(() => {
+        if (docentesPaused) return;
+        const maxScroll = (docentesGrid.scrollWidth - docentesGrid.clientWidth) / 2;
+        docentesGrid.scrollLeft += 1;
+        if (docentesGrid.scrollLeft >= maxScroll) {
+          docentesGrid.scrollLeft = 0;
+        }
+      }, 16);
+    }
+
+    function stopDocentesAutoScroll() {
+      if (docentesAutoScroll) {
+        clearInterval(docentesAutoScroll);
+        docentesAutoScroll = null;
+      }
+    }
+
+    docentesGrid.addEventListener('mouseenter', () => { docentesPaused = true; });
+    docentesGrid.addEventListener('mouseleave', () => { docentesPaused = false; });
+    docentesGrid.addEventListener('touchstart', () => { docentesPaused = true; }, { passive: true });
+    docentesGrid.addEventListener('touchend', () => { docentesPaused = false; }, { passive: true });
+
+    document.querySelectorAll('[data-docentes-prev], [data-docentes-next]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const dir = btn.hasAttribute('data-docentes-next') ? 1 : -1;
+        pauseDocentesAutoScroll(6000);
+        docentesGrid.scrollBy({ left: dir * cardStep, behavior: 'smooth' });
+        docentesGrid.classList.add('is-manual');
+      });
+    });
+
+    startDocentesAutoScroll();
 
     // Fade-in on scroll
     const observerOptions = {
