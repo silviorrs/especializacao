@@ -103,7 +103,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 .section--light { background: var(--branco); }
 .section--gray { background: var(--bg-light); }
-.section--dark { background: var(--cinza-escuro); }
+.section--dark { background: #0a0a0a; }
 
 .section__header {
   text-align: center;
@@ -296,7 +296,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
   align-items: center;
   justify-content: center;
   background:
-    linear-gradient(135deg, #262326 0%, #0b0b0b 100%);
+    linear-gradient(135deg, #0e0e0e 0%, #000000 100%);
   overflow: hidden;
 }
 
@@ -1308,7 +1308,7 @@ button { font-family: inherit; cursor: pointer; border: none; background: none; 
 
 /* ==================== FOOTER ==================== */
 .footer {
-  background: var(--bg-dark);
+  background: #080808;
   color: var(--cinza-claro);
   padding: 60px 0 24px;
 }
